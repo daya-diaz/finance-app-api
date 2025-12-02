@@ -1,10 +1,24 @@
-import { PostgresGetUserByIdRepository } from '../repositories/postgres/postgres-get-user-by-id-repository.js'
+import { GetUserByIdUseCase } from '../use-cases/get-user-by-id.js'
+import { badRequest, ok } from './helpers.js'
+import validator from 'validator'
 export class GetUserByIdController {
-    async execute(httpResponse) {
-        const getUserByIdRepository = new PostgresGetUserByIdRepository()
+    async execute(httpRequest) {
+        try {
+            const isIdValid = validator.isUUID(httpRequest.params.userId)
 
-        const user = await getUserByIdRepository.execute(httpResponse.params.id)
+            if (!isIdValid) {
+                return badRequest({ message: 'Invalid user ID format.' })
+            }
 
-        return user
+            const getUserByIdUseCase = new GetUserByIdUseCase()
+            const user = await getUserByIdUseCase.execute(
+                httpRequest.params.userId,
+            )
+
+            return ok(user)
+        } catch (error) {
+            console.error('Error getting user by ID:', error)
+            return badRequest({ message: 'Invalid user ID.' })
+        }
     }
 }
