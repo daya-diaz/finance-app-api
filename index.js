@@ -4,6 +4,7 @@ import express from 'express'
 import { PostgresHelper } from './src/db/postgres/helper.js'
 import { CreateUserController } from './src/controllers/create-user.js'
 import { GetUserByIdController } from './src/controllers/get-user-by-id.js'
+import { UpdateUserController } from './src/controllers/update-user.js'
 
 const app = express()
 
@@ -33,4 +34,11 @@ app.get('/api/users/:userId', async (req, res) => {
 
 app.listen(process.env.PORT, () => {
     console.log(`Listening on port ${process.env.PORT}...`)
+})
+
+app.patch('/api/users/:userId', async (req, res) => {
+    const updateUserController = new UpdateUserController()
+    const { statusCode, body } = await updateUserController.execute(req)
+
+    res.status(statusCode).json(body)
 })
