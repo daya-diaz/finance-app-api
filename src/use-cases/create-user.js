@@ -25,7 +25,6 @@ export class CreateUserUseCase {
             id: userId,
             password: hashedPassword,
         }
-
         const createdUser =
             await this.postgresCreateUserRepository.execute(user)
 
