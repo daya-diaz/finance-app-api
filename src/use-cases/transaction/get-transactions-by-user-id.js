@@ -5,10 +5,9 @@ export class GetTransactionsByUserIdUseCase {
         getUserByIdRepository,
         postgresGetTransactionsByUserIdRepository,
     ) {
-        ;(this.getUserByIdRepository = getUserByIdRepository)(
-            (this.postgresGetTransactionsByUserIdRepository =
-                postgresGetTransactionsByUserIdRepository),
-        )
+        this.getUserByIdRepository = getUserByIdRepository
+        this.postgresGetTransactionsByUserIdRepository =
+            postgresGetTransactionsByUserIdRepository
     }
 
     async execute(params) {
