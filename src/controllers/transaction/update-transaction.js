@@ -66,30 +66,6 @@ export class UpdateTransactionController {
                 }
             }
 
-            if (params.date) {
-                const dateIsValid = validator.isDate(params.date, {
-                    format: 'YYYY-MM-DD',
-                    strictMode: true,
-                    delimiters: ['-', '/'],
-                })
-
-                if (!dateIsValid) {
-                    return badRequest({
-                        message: 'Field date is not valid.',
-                    })
-                }
-
-                const transactionDate = new Date(params.date)
-                const today = new Date()
-                today.setHours(0, 0, 0, 0)
-
-                if (transactionDate > today) {
-                    return badRequest({
-                        message: 'Date cannot be in the future.',
-                    })
-                }
-            }
-
             const updatedTransaction =
                 await this.updateTransactionUseCase.execute(
                     transactionId,
