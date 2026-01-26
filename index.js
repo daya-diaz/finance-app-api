@@ -5,6 +5,7 @@ import { PostgresHelper } from './src/db/postgres/helper.js'
 import {
     makeCreateUserController,
     makeDeleteUserController,
+    makeGetUserBalanceController,
     makeGetUserByIdController,
     makeUpdateUserController,
 } from './src/factories/controllers/user.js'
@@ -23,6 +24,13 @@ app.get('/api/users', async (_req, res) => {
     const results = await PostgresHelper.query('SELECT * FROM users;')
 
     res.send(JSON.stringify(results))
+})
+
+app.get('/api/users/:userId/balance', async (req, res) => {
+    const getUserBalanceController = makeGetUserBalanceController()
+    const { statusCode, body } = await getUserBalanceController.execute(req)
+
+    res.status(statusCode).send(body)
 })
 
 app.post('/api/users', async (req, res) => {
