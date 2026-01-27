@@ -1,4 +1,12 @@
+## Dependencies
 node_modules
-.postgres
+
+## Environment variables
 .env
+
+## Postgres
+.postgres
+.postgres-data
+
+## Notes
 .NOTES.md
