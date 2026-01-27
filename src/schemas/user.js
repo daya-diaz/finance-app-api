@@ -28,3 +28,7 @@ export const createUserSchema = z.object({
             message: 'Password cannot contain spaces',
         }),
 })
+
+export const updateUserSchema = createUserSchema.partial().strict({
+    message: 'Some provided fields are not allowed to be updated.',
+})

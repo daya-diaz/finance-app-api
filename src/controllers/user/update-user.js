@@ -1,15 +1,13 @@
 import { EmailAlreadyInUseError } from '../../errors/user.js'
 import {
-    invalidPasswordResponse,
-    emailIsAlreadyInUseResponse,
     invalidIdResponse,
-    checkIfEmailIsValid,
-    checkIfPasswordIsValid,
     checkIfIdIsValid,
     badRequest,
     ok,
     serverError,
 } from '../helpers/index.js'
+
+import { updateUserSchema } from '../../schemas/user.js'
 
 export class UpdateUserController {
     constructor(updateUserUseCase) {
@@ -43,21 +41,7 @@ export class UpdateUserController {
                 })
             }
 
-            if (params.password) {
-                const passwordIsValid = checkIfPasswordIsValid(params.password)
-
-                if (!passwordIsValid) {
-                    return invalidPasswordResponse()
-                }
-            }
-
-            if (params.email) {
-                const emailIsValid = checkIfEmailIsValid(params.email)
-
-                if (!emailIsValid) {
-                    return emailIsAlreadyInUseResponse()
-                }
-            }
+            await updateUserSchema.parseAsync(params)
 
             const updatedUser = await this.updateUserUseCase.execute(
                 userId,
