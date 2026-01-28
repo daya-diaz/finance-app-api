@@ -8,6 +8,7 @@ import {
 } from '../helpers/index.js'
 
 import { updateUserSchema } from '../../schemas/user.js'
+import { ZodError } from 'zod'
 
 export class UpdateUserController {
     constructor(updateUserUseCase) {
@@ -49,6 +50,12 @@ export class UpdateUserController {
             )
             return ok(updatedUser)
         } catch (error) {
+            if (error instanceof ZodError) {
+                const firstIssue = error.issues[0]
+                return badRequest({
+                    message: firstIssue.message,
+                })
+            }
             if (error instanceof EmailAlreadyInUseError) {
                 return badRequest({ message: error.message })
             }
