@@ -17,7 +17,7 @@ export const createUserSchema = z.object({
         .string()
         .trim()
         .min(1, { message: 'Email is required' })
-        .email({ message: 'Please provide a valid email' }),
+        .email('Please provide a valid email'),
 
     password: z
         .string()
