@@ -5,7 +5,7 @@
     "type": "module",
     "scripts": {
         "test": "jest",
-        "test:watch": "jest --watch",
+        "test:watch": "jest --watch --passWithNoTests",
         "postinstall": "npx husky install && npx prisma generate",
         "start:dev": "node --watch index.js",
         "db:studio": "prisma studio"
@@ -15,6 +15,9 @@
     "license": "ISC",
     "description": "",
     "devDependencies": {
+        "@babel/core": "^7.28.6",
+        "@babel/preset-env": "^7.28.6",
+        "babel-jest": "^30.2.0",
         "eslint": "^8.46.0",
         "eslint-config-prettier": "^10.1.8",
         "git-commit-msg-linter": "^5.0.8",
