@@ -4,9 +4,8 @@ import { EmailAlreadyInUseError } from '../../errors/user.js'
 
 export class CreateUserUseCase {
     constructor(getUserByEmailRepository, postgresCreateUserRepository) {
-        ;(this.getUserByEmailRepository = getUserByEmailRepository)(
-            (this.postgresCreateUserRepository = postgresCreateUserRepository),
-        )
+        this.getUserByEmailRepository = getUserByEmailRepository
+        this.postgresCreateUserRepository = postgresCreateUserRepository
     }
 
     async execute(createUserParams) {
