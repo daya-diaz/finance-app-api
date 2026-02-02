@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker'
 import { DeleteUserController } from './delete-user.js'
+import { serverError } from '../helpers/http.js'
 
 describe('DeleteUserController', () => {
     class DeleteUserUseCaseStub {
@@ -64,5 +65,20 @@ describe('DeleteUserController', () => {
 
         // asset
         expect(result.statusCode).toBe(404)
+    })
+
+    it('should return 500 if throws an internal server error', async () => {
+        // arrange
+        const { sut, deleteUserUseCase } = makeSut()
+
+        // act
+        jest.spyOn(deleteUserUseCase, 'execute').mockImplementationOnce(() => {
+            throw new serverError()
+        })
+
+        const result = await sut.execute(httpRequest)
+
+        // asset
+        expect(result.statusCode).toBe(500)
     })
 })
