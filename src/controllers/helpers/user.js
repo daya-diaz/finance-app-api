@@ -13,5 +13,5 @@ export const emailIsAlreadyInUseResponse = () => {
 }
 
 export const userNotFoundResponse = () => {
-    notFound({ message: 'User not found.' })
+    return notFound({ message: 'User not found.' })
 }
