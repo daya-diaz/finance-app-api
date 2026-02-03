@@ -4,7 +4,7 @@ import { GetUserBalanceController } from './get-user-balance'
 import { faker } from '@faker-js/faker'
 
 describe('GetUserBalanceController', () => {
-    class GetUserBalanceUseCase {
+    class GetUserBalanceUseCaseStub {
         execute() {
             return {
                 totalExpenses: faker.number.int({ min: 1000, max: 1000 }),
@@ -16,7 +16,7 @@ describe('GetUserBalanceController', () => {
     }
 
     const makeSut = () => {
-        const getUserBalanceUseCase = new GetUserBalanceUseCase()
+        const getUserBalanceUseCase = new GetUserBalanceUseCaseStub()
         const sut = new GetUserBalanceController(getUserBalanceUseCase)
 
         return {
@@ -85,5 +85,37 @@ describe('GetUserBalanceController', () => {
 
         // assert
         expect(result.statusCode).toBe(404)
+    })
+
+    it('should return 500 if throws an server error', async () => {
+        // arrange
+        const { sut, getUserBalanceUseCase } = makeSut()
+
+        // act
+        jest.spyOn(getUserBalanceUseCase, 'execute').mockImplementationOnce(
+            () => {
+                throw new serverError()
+            },
+        )
+
+        const result = await sut.execute(httpRequest)
+
+        // assert
+        expect(result.statusCode).toBe(500)
+    })
+
+    it('should return 500 if GetUserByIdUseCase throws', async () => {
+        // arrange
+        const { sut, getUserBalanceUseCase } = makeSut()
+
+        // act
+        jest.spyOn(getUserBalanceUseCase, 'execute').mockRejectedValue(
+            new Error(),
+        )
+
+        const result = await sut.execute(httpRequest)
+
+        // assert
+        expect(result.statusCode).toBe(500)
     })
 })
