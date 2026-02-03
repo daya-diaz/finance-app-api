@@ -4,7 +4,7 @@ import { EmailAlreadyInUseError } from '../../errors/user'
 
 describe('CreateUserController', () => {
     class CreateUserUseCaseStub {
-        execute(user) {
+        async execute(user) {
             return user
         }
     }
@@ -137,9 +137,9 @@ describe('CreateUserController', () => {
         const { createUserUseCase, sut } = makeSut()
 
         // act
-        jest.spyOn(createUserUseCase, 'execute').mockImplementationOnce(() => {
-            throw new Error()
-        })
+        jest.spyOn(createUserUseCase, 'execute').mockRejectedValueOnce(
+            new Error(),
+        )
         const result = await sut.execute(httpRequest)
 
         // assert
@@ -151,9 +151,9 @@ describe('CreateUserController', () => {
         const { createUserUseCase, sut } = makeSut()
 
         // act
-        jest.spyOn(createUserUseCase, 'execute').mockImplementationOnce(() => {
-            throw new EmailAlreadyInUseError(httpRequest.body.email)
-        })
+        jest.spyOn(createUserUseCase, 'execute').mockRejectedValueOnce(
+            new EmailAlreadyInUseError(httpRequest.body.email),
+        )
         const result = await sut.execute(httpRequest)
 
         // assert

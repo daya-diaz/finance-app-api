@@ -4,7 +4,7 @@ import { serverError } from '../helpers/http.js'
 
 describe('DeleteUserController', () => {
     class DeleteUserUseCaseStub {
-        execute() {
+        async execute() {
             return {
                 id: faker.string.uuid(),
                 first_name: faker.person.firstName(),
@@ -59,7 +59,7 @@ describe('DeleteUserController', () => {
         const { sut, deleteUserUseCase } = makeSut()
 
         //act
-        jest.spyOn(deleteUserUseCase, 'execute').mockReturnValueOnce(null)
+        jest.spyOn(deleteUserUseCase, 'execute').mockResolvedValueOnce(null)
 
         const result = await sut.execute(httpRequest)
 
@@ -72,8 +72,8 @@ describe('DeleteUserController', () => {
         const { sut, deleteUserUseCase } = makeSut()
 
         // act
-        jest.spyOn(deleteUserUseCase, 'execute').mockImplementationOnce(() => {
-            throw new serverError()
+        jest.spyOn(deleteUserUseCase, 'execute').mockRejectedValueOnce(() => {
+            new serverError()
         })
 
         const result = await sut.execute(httpRequest)
