@@ -6,9 +6,8 @@ export class UpdateUserUseCase {
         postgresGetUserByEmailRepository,
         postgresUpdateUserRepository,
     ) {
-        ;(this.postgresGetUserByEmailRepository =
-            postgresGetUserByEmailRepository),
-            (this.postgresUpdateUserRepository = postgresUpdateUserRepository)
+        this.postgresGetUserByEmailRepository = postgresGetUserByEmailRepository
+        this.postgresUpdateUserRepository = postgresUpdateUserRepository
     }
     async execute(userId, updateUserParams) {
         if (updateUserParams.email) {
