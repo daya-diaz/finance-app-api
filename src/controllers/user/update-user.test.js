@@ -1,3 +1,4 @@
+import { ZodError } from 'zod'
 import { EmailAlreadyInUseError } from '../../errors/user'
 import { UpdateUserController } from './update-user'
 import { faker } from '@faker-js/faker'
@@ -129,5 +130,27 @@ describe('UpdateUserController', () => {
 
         // assert
         expect(result.statusCode).toBe(400)
+    })
+
+    it('should return 400 if UpdateUserUseCase throws a ZodError', async () => {
+        // arrange
+        const { sut, updateUserUseCase } = makeSut()
+        const zodError = new ZodError([
+            {
+                code: 'invalid_type',
+                expected: 'string',
+                received: 'number',
+                path: ['email'],
+                message: 'Expected string, received number',
+            },
+        ])
+        jest.spyOn(updateUserUseCase, 'execute').mockRejectedValueOnce(zodError)
+
+        // act
+        const result = await sut.execute(httpRequest)
+
+        // assert
+        expect(result.statusCode).toBe(400)
+        expect(result.body.message).toBe('Expected string, received number')
     })
 })
