@@ -25,6 +25,5 @@ export const invalidTypeResponse = () =>
             'The transaction type is invalid. It must be EARNING, EXPENSE or INVESTMENT.',
     })
 
-export const transactionNotFoundResponse = () => {
+export const transactionNotFoundResponse = () =>
     notFound({ message: 'Transaction not found.' })
-}
