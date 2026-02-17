@@ -143,4 +143,30 @@ describe('UpdateTransactionController', () => {
         // assert
         expect(response.statusCode).toBe(500)
     })
+
+    it('should call UpdateTransactionUseCase with correct params', async () => {
+        // arrange
+        const { sut, updateTransactionUseCase } = makeSut()
+
+        const executeSpy = jest.spyOn(updateTransactionUseCase, 'execute')
+
+        const transactionId = faker.string.uuid()
+        const body = {
+            name: faker.commerce.productName(),
+            date: faker.date.anytime().toISOString(),
+            type: 'EARNING',
+            amount: Number(faker.finance.amount()),
+        }
+        // act
+        await sut.execute({
+            params: {
+                transactionId,
+            },
+            body,
+        })
+
+        // assert
+        expect(executeSpy).toHaveBeenCalledWith(transactionId, body)
+        expect(executeSpy).toHaveBeenCalledTimes(1)
+    })
 })
