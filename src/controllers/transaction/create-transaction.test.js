@@ -77,4 +77,17 @@ describe('CreateTransactionController', () => {
         expect(result.statusCode).toBe(400)
         expect(result.body.message).toBe('Expected string, received number')
     })
+
+    it('should call CreateTransactionUseCase with correct params', async () => {
+        const { sut, createTransactionUseCase } = makeSut()
+
+        const executeSpy = jest.spyOn(createTransactionUseCase, 'execute')
+
+        // act
+        await sut.execute(httpRequest)
+
+        // assert
+        expect(executeSpy).toHaveBeenCalledWith(httpRequest.body)
+        expect(executeSpy).toHaveBeenCalledTimes(1)
+    })
 })
