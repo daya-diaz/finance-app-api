@@ -10,17 +10,13 @@ export class GetTransactionsByUserIdUseCase {
             postgresGetTransactionsByUserIdRepository
     }
 
-    async execute(params) {
-        const userExists = await this.getUserByIdRepository.execute(
-            params.userId,
-        )
+    async execute(userId) {
+        const userExists = await this.getUserByIdRepository.execute(userId)
 
-        if (!userExists) throw new UserNotFoundError(params.userId)
+        if (!userExists) throw new UserNotFoundError(userId)
 
         const transactions =
-            await this.postgresGetTransactionsByUserIdRepository.execute(
-                params.userId,
-            )
+            await this.postgresGetTransactionsByUserIdRepository.execute(userId)
 
         return transactions
     }
