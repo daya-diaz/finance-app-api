@@ -1,4 +1,3 @@
-import { IdGeneratorAdapter } from '../../adapters/id-generator.js'
 import {
     CreateTransactionController,
     GetTransactionsByUserIdController,
@@ -18,6 +17,8 @@ import {
     GetTransactionsByUserIdUseCase,
     UpdateTransactionUseCase,
 } from '../../use-cases/index.js'
+
+import { IdGeneratorAdapter } from '../../adapters/index.js'
 
 export const makeCreateTransactionController = () => {
     const createTransactionRepository =
