@@ -85,9 +85,6 @@ describe('UpdateTransactionController', () => {
 
         // assert
         expect(response.statusCode).toBe(400)
-        expect(response.body.message).toBe(
-            'Some fields are not allowed to be updated.',
-        )
     })
 
     it('should return 400 if UpdateTransactionUseCase throws a ZodError', async () => {

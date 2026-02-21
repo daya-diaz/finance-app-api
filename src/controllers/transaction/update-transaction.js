@@ -15,35 +15,22 @@ export class UpdateTransactionController {
 
     async execute(httpRequest) {
         try {
-            const transactionId = httpRequest.params.transactionId
-            const idIsValid = checkIfIdIsValid(transactionId)
-            const params = httpRequest.body
+            const idIsValid = checkIfIdIsValid(httpRequest.params.transactionId)
 
             if (!idIsValid) {
                 return invalidIdResponse()
             }
 
-            const allowedFields = ['name', 'date', 'amount', 'type']
-
-            const someFieldIsNotAllowed = Object.keys(params).some(
-                (key) => !allowedFields.includes(key),
-            )
-
-            if (someFieldIsNotAllowed) {
-                return badRequest({
-                    message: 'Some fields are not allowed to be updated.',
-                })
-            }
+            const params = httpRequest.body
 
             await updateTransactionSchema.parseAsync(params)
 
-            const updatedTransaction =
-                await this.updateTransactionUseCase.execute(
-                    transactionId,
-                    params,
-                )
+            const transaction = await this.updateTransactionUseCase.execute(
+                httpRequest.params.transactionId,
+                params,
+            )
 
-            return ok(updatedTransaction)
+            return ok(transaction)
         } catch (error) {
             if (error instanceof ZodError) {
                 const firstIssue = error.issues[0]
