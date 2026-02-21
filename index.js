@@ -1,7 +1,7 @@
 import 'dotenv/config.js'
 import express from 'express'
 
-import { PostgresHelper } from './src/db/postgres/helper.js'
+import prisma from './prisma/prisma.js'
 import {
     makeCreateUserController,
     makeDeleteUserController,
@@ -21,7 +21,7 @@ const app = express()
 app.use(express.json())
 
 app.get('/api/users', async (_req, res) => {
-    const results = await PostgresHelper.query('SELECT * FROM users;')
+    const results = await prisma.user.findMany()
 
     res.send(JSON.stringify(results))
 })
