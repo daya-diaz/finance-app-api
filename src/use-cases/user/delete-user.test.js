@@ -19,15 +19,15 @@ describe('DeleteUserUseCase', () => {
     }
 
     const makeSut = () => {
-        const deleteUserRepositoryStub = new DeleteUserRepositoryStub()
-        const sut = new DeleteUserUseCase(deleteUserRepositoryStub)
+        const deleteUserRepository = new DeleteUserRepositoryStub()
+        const sut = new DeleteUserUseCase(deleteUserRepository)
         return {
             sut,
-            deleteUserRepositoryStub,
+            deleteUserRepository,
         }
     }
 
-    it('should successfully delete the user', async () => {
+    it('should successfully delete a user', async () => {
         const { sut } = makeSut()
 
         const deletedUser = await sut.execute(faker.string.uuid())
@@ -36,12 +36,26 @@ describe('DeleteUserUseCase', () => {
     })
 
     it('should call DeleteUserRepository with the correct params', async () => {
-        const { sut, deleteUserRepositoryStub } = makeSut()
-        const executeSpy = jest.spyOn(deleteUserRepositoryStub, 'execute')
+        const { sut, deleteUserRepository } = makeSut()
+        const executeSpy = jest.spyOn(deleteUserRepository, 'execute')
         const userId = faker.string.uuid()
 
         await sut.execute(userId)
 
         expect(executeSpy).toHaveBeenCalledWith(userId)
+    })
+
+    it('should throw when DeleteUserRepository throws', async () => {
+        // arrange
+        const { sut, deleteUserRepository } = makeSut()
+        jest.spyOn(deleteUserRepository, 'execute').mockRejectedValueOnce(
+            new Error(),
+        )
+
+        // act
+        const promise = sut.execute(faker.string.uuid())
+
+        // assert
+        await expect(promise).rejects.toThrow()
     })
 })
