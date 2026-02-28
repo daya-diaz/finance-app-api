@@ -147,7 +147,9 @@ describe('UpdateUserUseCase', () => {
         )
 
         // act
-        const promise = sut.execute(faker.string.uuid())
+        const promise = sut.execute(faker.string.uuid(), {
+            email: faker.internet.email(),
+        })
 
         // assert
         await expect(promise).rejects.toThrow()
@@ -161,7 +163,9 @@ describe('UpdateUserUseCase', () => {
         )
 
         // act
-        const promise = sut.execute(faker.string.uuid())
+        const promise = sut.execute(faker.string.uuid(), {
+            password: faker.internet.password(),
+        })
 
         // assert
         await expect(promise).rejects.toThrow()
@@ -175,7 +179,7 @@ describe('UpdateUserUseCase', () => {
         )
 
         // act
-        const promise = sut.execute(faker.string.uuid())
+        const promise = sut.execute(faker.string.uuid(), { ...user, id: null })
 
         // assert
         await expect(promise).rejects.toThrow()
