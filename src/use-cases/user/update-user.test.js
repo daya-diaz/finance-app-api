@@ -65,29 +65,40 @@ describe('UpdateUserUseCase', () => {
 
     it('should update user successfully passing email', async () => {
         // arrange
-        const { sut } = makeSut()
+        const { sut, getUserByEmailRepository } = makeSut()
+        const getUserByEmailRepositorySpy = jest.spyOn(
+            getUserByEmailRepository,
+            'execute',
+        )
+        const email = faker.internet.email()
 
         // act
         const result = await sut.execute(faker.string.uuid(), {
-            email: faker.internet.email(),
+            email,
         })
 
         // assert
+        expect(getUserByEmailRepositorySpy).toHaveBeenCalledWith(email)
         expect(result).toBe(user)
     })
 
     it('should update user successfully passing password', async () => {
         // arrange
-        const { sut } = makeSut()
-
+        const { sut, passwordHasherAdapter } = makeSut()
+        const passwordHasherAdapterSpy = jest.spyOn(
+            passwordHasherAdapter,
+            'execute',
+        )
+        const password = faker.internet.password({
+            length: 7,
+        })
         // act
         const result = await sut.execute(faker.string.uuid(), {
-            password: faker.internet.password({
-                length: 7,
-            }),
+            password,
         })
 
         // assert
+        expect(passwordHasherAdapterSpy).toHaveBeenCalledWith(password)
         expect(result).toBe(user)
     })
 
