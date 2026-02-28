@@ -74,4 +74,19 @@ describe('UpdateUserUseCase', () => {
         // assert
         expect(result).toBe(user)
     })
+
+    it('should update user successfully passing password', async () => {
+        // arrange
+        const { sut } = makeSut()
+
+        // act
+        const result = await sut.execute(faker.string.uuid(), {
+            password: faker.internet.password({
+                length: 7,
+            }),
+        })
+
+        // assert
+        expect(result).toBe(user)
+    })
 })
